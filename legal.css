@@ -1,0 +1,41 @@
+/* shared by privacy.html, terms.html, responsible-use.html, 404.html */
+.l-hero{position:relative;padding:150px 0 60px;overflow:hidden;isolation:isolate}
+.l-hero h1{font-size:clamp(2.6rem,7vw,5rem);font-weight:900;letter-spacing:-.06em;line-height:1;animation:fade 1s both}
+.l-hero .sub{font-size:1.15rem;animation:fade 1s .15s both}
+.updated{margin-top:1.2rem;color:var(--dim);font-size:.85rem;font-weight:600}
+@keyframes fade{from{opacity:0;transform:translateY(14px)}}
+.l-grid{display:grid;grid-template-columns:260px 1fr;gap:4rem;padding-bottom:110px;align-items:start}
+.toc{position:sticky;top:100px;background:var(--surf);border:1px solid var(--line);border-radius:22px;padding:1.3rem 1.3rem 1rem}
+.toc>b{display:block;font:800 .72rem var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);margin-bottom:.8rem}
+.toc ol{list-style:none;padding:0;display:grid;gap:.1rem;counter-reset:t}
+.toc ol a{display:block;text-decoration:none;color:var(--mut);font-size:.9rem;font-weight:600;padding:.4em .7em;border-radius:10px;border-left:2px solid transparent;transition:.2s}
+.toc ol a:hover{color:var(--text)}.toc ol a.on{color:var(--lime);background:rgba(200,255,46,.07);border-left-color:var(--lime)}
+.other{margin-top:1rem;padding-top:1rem;border-top:1px solid var(--line);display:grid;gap:.2rem}
+.other a{text-decoration:none;color:var(--dim);font-size:.85rem;font-weight:600;padding:.3em .7em}
+.other a:hover{color:var(--text)}.other a.cur{color:var(--text)}
+.doc section{padding:2.2rem 0;border-bottom:1px solid var(--line)}.doc section:first-child{padding-top:0}
+.doc h2{font-size:clamp(1.4rem,2.6vw,1.9rem);margin-bottom:1rem;letter-spacing:-.04em;scroll-margin-top:100px}
+.doc p{color:#cfc8ea;max-width:44em}.doc p+p{margin-top:.9rem}.doc p+ul,.doc ul+p{margin-top:.9rem}
+.doc ul{list-style:none;padding:0;display:grid;gap:.6rem;max-width:44em}
+.doc li{position:relative;padding-left:1.5rem;color:#cfc8ea}
+.doc li::before{content:"";position:absolute;left:0;top:.62em;width:8px;height:8px;border-radius:50%;background:var(--lime)}
+.doc b{color:var(--text)}
+.doc a{color:var(--cyan);text-underline-offset:3px}.doc a:hover{color:var(--lime)}
+.contact-card{margin-top:2.4rem;background:var(--surf2);border:1px solid var(--line);border-left:4px solid var(--lime);border-radius:18px;padding:1.3rem 1.5rem}
+.contact-card b{font-family:var(--display);letter-spacing:-.03em}.contact-card p{margin-top:.3rem}
+
+/* 404 */
+body.nf{min-height:100vh;display:grid;place-items:center;text-align:center;overflow:hidden;position:relative}
+.nf-in{position:relative;z-index:2;padding:2rem 20px}
+.nf h1{font-size:clamp(2.6rem,9vw,6rem);font-weight:900;letter-spacing:-.06em}
+.nf .sub{margin:1rem auto 2rem}
+.nf-balls{display:flex;gap:1rem;justify-content:center;margin-bottom:1.6rem}
+.nf-balls .ball{width:clamp(70px,16vw,110px);height:clamp(70px,16vw,110px);font-size:clamp(2rem,6vw,3.4rem);animation:bob 3s ease-in-out infinite}
+.nf-balls .ball:nth-child(2){animation-delay:-1s}.nf-balls .ball:nth-child(3){animation-delay:-2s}
+.nf .mesh{position:fixed}
+
+@media (max-width:900px){
+  .l-grid{grid-template-columns:1fr;gap:2rem}
+  .toc{position:static}
+  .l-hero{padding-top:120px}
+}

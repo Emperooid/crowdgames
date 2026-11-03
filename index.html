@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CrowdGames — Play the crowd. Win the hour.</title>
+<meta name="description" content="Two fast games on your phone: pick 1–5 against the crowd every hour, or hide a number and out-guess other players. 24 rounds a day.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0716">
+<link rel="icon" href="assets/brand/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-arrow" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M5 12h14M13 6l6 6-6 6"/></symbol>
+  <symbol id="i-bolt" viewBox="0 0 24 24"><path fill="currentColor" d="M13 2 4 14h6l-1 8 9-12h-6z"/></symbol>
+  <symbol id="i-wallet" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" d="M3 7a2 2 0 0 1 2-2h13v4M3 7v10a2 2 0 0 0 2 2h14a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H5a2 2 0 0 1-2-1Zm13 6h2"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></g></symbol>
+  <symbol id="i-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></g></symbol>
+  <symbol id="i-users" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.2-5.5 6.5-5.5s5.9 1.9 6.5 5.5M16 4.8a3.5 3.5 0 0 1 0 6.4M18 14.8c2 .7 3.2 2.4 3.5 5.2"/></g></symbol>
+  <symbol id="i-bank" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"><path d="m3 9 9-5 9 5zM5 9v8M9.5 9v8M14.5 9v8M19 9v8M3 20h18"/></g></symbol>
+  <symbol id="i-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="3"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></g></symbol>
+  <symbol id="i-finger" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 11a6 6 0 0 1 12 0M9 21c-1-2-1-5 0-7M12 21c-1-3-1-7 0-9M15 20c0-3 1-5 2-7M4 16c.5-2 .5-3.5.5-5"/></g></symbol>
+  <symbol id="i-sound" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9zM17 9a4 4 0 0 1 0 6"/></g></symbol>
+  <symbol id="i-mute" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9zM17 9l5 6M22 9l-5 6"/></g></symbol>
+</svg>
+
+<div class="progress" id="progress"></div>
+<div class="cursor-glow" id="glow" aria-hidden="true"></div>
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a href="#top" class="brand"><img src="assets/brand/logo.png" alt="" width="36" height="36"><span>Crowd<i>Games</i></span></a>
+    <nav class="links" aria-label="Main">
+      <a href="#games">Games</a><a href="#arena">Arena</a><a href="#clock">Rounds</a><a href="#safe">Safety</a><a href="#faq">FAQ</a>
+    </nav>
+    <a href="#download" class="btn btn-lime btn-sm">Get the app</a>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="mesh m1"></div><div class="mesh m2"></div><div class="mesh m3"></div>
+  <div class="floor" aria-hidden="true"></div>
+  <div class="orbs" aria-hidden="true">
+    <span class="orb o1" data-depth="40" data-n="1">1</span>
+    <span class="orb o2" data-depth="70" data-n="2">2</span>
+    <span class="orb o3" data-depth="30" data-n="3">3</span>
+    <span class="orb o4" data-depth="60" data-n="4">4</span>
+    <span class="orb o5" data-depth="50" data-n="5">5</span>
+  </div>
+
+  <div class="wrap hero-grid">
+    <div class="hero-copy">
+      <p class="pill"><span class="dot"></span><span id="liveText">Round open now</span></p>
+      <h1 class="kinetic" aria-label="Play the crowd. Win the hour.">
+        <span class="ln"><span class="w">Play</span> <span class="w">the</span></span>
+        <span class="ln"><span class="w hot">crowd.</span></span>
+        <span class="ln"><span class="w">Win</span> <span class="w">the</span> <span class="w lime">hour.</span></span>
+      </h1>
+      <p class="lead">Two fast games. One live crowd. Pick a number from 1 to 5 every hour, or hide one and out-guess another player. 24 rounds a day, paid straight to your wallet.</p>
+      <div class="cta">
+        <a class="btn btn-lime btn-lg magnet" href="#download">Get the app <svg class="ic"><use href="#i-arrow"/></svg></a>
+        <a class="btn btn-ghost btn-lg" href="#arena">Play a free demo</a>
+      </div>
+      <p class="age">18+ only · Play responsibly</p>
+    </div>
+
+    <div class="hero-phone" aria-hidden="true">
+      <div class="phone" id="phone">
+        <div class="notch"></div>
+        <div class="ps">
+          <div class="ps-top"><span>Round <b id="pRound">14</b></span><em id="pClock">00:00</em></div>
+          <div class="ps-ring"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="52" class="r-bg"/><circle cx="60" cy="60" r="52" class="r-fg" id="pRing"/></svg><b id="pNum">3</b><small>your pick</small></div>
+          <div class="ps-balls" id="pBalls"></div>
+          <div class="ps-btn" id="pBtn">Lock in</div>
+          <div class="ps-toast" id="pToast">Locked in <svg class="ic"><use href="#i-bolt"/></svg></div>
+        </div>
+      </div>
+      <div class="float-chip fc1"><svg class="ic"><use href="#i-users"/></svg>Crowd value updated</div>
+      <div class="float-chip fc2"><svg class="ic"><use href="#i-wallet"/></svg>Paid to wallet</div>
+    </div>
+  </div>
+
+  <div class="marquee" aria-hidden="true"><div class="marquee-track" id="marquee"></div></div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="wrap stats-grid">
+    <div><b data-count="24">0</b><span>rounds every day</span></div>
+    <div><b data-count="50" data-suffix=" min">0</b><span>to lock in your pick</span></div>
+    <div><b>1–5</b><span>pick a number, that's it</span></div>
+    <div><b data-count="1000" data-prefix="₦">0</b><span>top stake per card</span></div>
+  </div>
+</section>
+
+<!-- GAMES -->
+<section class="sec" id="games">
+  <div class="wrap">
+    <div class="head">
+      <p class="kicker">Choose your game</p>
+      <h2>Two games. <span class="lime">Zero</span> confusion.</h2>
+    </div>
+    <div class="bento">
+      <article class="tile t-hourly" data-tilt>
+        <img src="assets/games/every-hour-autoplay.jpg" alt="Hourly Cash artwork" loading="lazy" width="900" height="600">
+        <div class="tile-in">
+          <span class="tag">Game 01 · every hour</span>
+          <h3>Hourly Cash</h3>
+          <p>Pick 1 to 5. Everyone's picks combine into the crowd's value when the round settles. Land close and your gain grows.</p>
+          <a href="#arena" class="btn btn-lime" data-game="hourly">Play demo <svg class="ic"><use href="#i-arrow"/></svg></a>
+        </div>
+      </article>
+      <article class="tile t-hide" data-tilt>
+        <img src="assets/games/hide-or-guess-spin.jpg" alt="Hide or Guess artwork" loading="lazy" width="900" height="600">
+        <div class="tile-in">
+          <span class="tag pink">Game 02 · instant</span>
+          <h3>Hide or Guess</h3>
+          <p>Hide a number behind a card, or guess what's behind someone else's. Right guess wins on the spot. Wrong guess costs the stake.</p>
+          <a href="#arena" class="btn btn-pink" data-game="guess">Play demo <svg class="ic"><use href="#i-arrow"/></svg></a>
+        </div>
+      </article>
+      <article class="tile t-auto">
+        <svg class="ic big"><use href="#i-bolt"/></svg>
+        <h3>Auto Play</h3>
+        <p>Set your figure once. The app locks it in right before each round closes.</p>
+      </article>
+      <article class="tile t-wallet">
+        <svg class="ic big"><use href="#i-wallet"/></svg>
+        <h3>Instant wallet</h3>
+        <p>Fund, play, cash out to your bank.</p>
+      </article>
+      <article class="tile t-invite">
+        <svg class="ic big"><use href="#i-users"/></svg>
+        <h3>Invite &amp; earn</h3>
+        <p>Bring friends from your contacts. Earn reward credits when they join and play.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ARENA -->
+<section class="sec arena-sec" id="arena">
+  <div class="wrap">
+    <div class="head center">
+      <p class="kicker">The arena</p>
+      <h2>Play it right here. <span class="lime">Free.</span></h2>
+      <p class="sub">Practice mode with pretend money. Nothing real is staked.</p>
+    </div>
+
+    <div class="arena">
+      <div class="a-top">
+        <div class="seg" role="tablist" aria-label="Pick a game">
+          <button role="tab" aria-selected="true" data-tab="hourly">Hourly Cash</button>
+          <button role="tab" aria-selected="false" data-tab="guess">Guess a card</button>
+          <button role="tab" aria-selected="false" data-tab="hide">Hide a number</button>
+        </div>
+        <div class="a-right">
+          <button class="icon-btn" id="snd" aria-label="Sound off" aria-pressed="false"><svg class="ic"><use href="#i-mute"/></svg></button>
+          <div class="wal"><small>Demo wallet</small><b id="wal">₦5,000</b></div>
+          <button class="mini" id="reset">Reset</button>
+        </div>
+      </div>
+
+      <!-- HOURLY -->
+      <div class="pane" id="p-hourly">
+        <div class="stage" id="drop">
+          <div class="lanes" id="lanes"></div>
+          <div class="track" id="track">
+            <div class="axis"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span></div>
+            <div class="mk you" id="mkYou"><i>You</i></div>
+            <div class="mk crowd" id="mkCrowd"><i>Crowd</i></div>
+          </div>
+        </div>
+        <div class="ctrl">
+          <h3>1. Pick your number</h3>
+          <div class="balls" id="hBalls"></div>
+          <h3>2. Choose your stake</h3>
+          <div class="chips" id="hStake"></div>
+          <button class="btn btn-lime btn-lg btn-block" id="hGo" disabled>Pick a number</button>
+          <p class="result" id="hRes" aria-live="polite">Closer to the crowd's value means a bigger gain.</p>
+        </div>
+      </div>
+
+      <!-- GUESS -->
+      <div class="pane" id="p-guess" hidden>
+        <div class="stage cards-stage">
+          <div class="fan" id="fan"></div>
+          <p class="streak">Streak <b id="streak">0</b> · Best <b id="best">0</b></p>
+        </div>
+        <div class="ctrl">
+          <h3 id="gTitle">Tap a card to guess it</h3>
+          <div class="balls" id="gBalls"></div>
+          <button class="btn btn-pink btn-lg btn-block" id="gGo" disabled>Lock in my guess</button>
+          <p class="result" id="gRes" aria-live="polite">Guess right and win the card's stake. Guess wrong and lose it.</p>
+        </div>
+      </div>
+
+      <!-- HIDE -->
+      <div class="pane" id="p-hide" hidden>
+        <div class="stage hide-stage">
+          <div class="hcard" id="hCard"><div class="hc-face"><b id="hcNum">?</b><small id="hcStake">₦200</small></div></div>
+          <div class="reel" id="reel" aria-hidden="true"><span>?</span></div>
+          <p class="reel-l" id="reelL">A player will try to guess your number</p>
+        </div>
+        <div class="ctrl">
+          <h3>1. Hide a number</h3>
+          <div class="balls" id="hdBalls"></div>
+          <h3>2. Set the stake</h3>
+          <div class="chips" id="hdStake"></div>
+          <button class="btn btn-lime btn-lg btn-block" id="hdGo" disabled>Hide a number</button>
+          <p class="result" id="hdRes" aria-live="polite">If they guess wrong, you keep their stake. If they're right, you lose yours.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW -->
+<section class="sec" id="how">
+  <div class="wrap how">
+    <div class="how-l">
+      <p class="kicker">Hourly Cash</p>
+      <h2>Four steps. <span class="lime">One hour.</span></h2>
+      <div class="how-line"><i id="howLine"></i></div>
+    </div>
+    <ol class="how-steps">
+      <li><b>01</b><h3>Pick 1 to 5</h3><p>Choose an open round and your number. Set it now or ahead of time for later rounds.</p></li>
+      <li><b>02</b><h3>50 minutes</h3><p>Rounds open on the hour and close 50 minutes later. Lock it in and it's locked.</p></li>
+      <li><b>03</b><h3>The crowd decides</h3><p>At settlement everyone's picks combine into the crowd's value for that hour.</p></li>
+      <li><b>04</b><h3>Closest wins most</h3><p>The nearer your pick to the crowd's value, the bigger your gain.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- CLOCK -->
+<section class="sec dark" id="clock">
+  <div class="wrap clock-grid">
+    <div>
+      <p class="kicker">Live right now</p>
+      <h2>24 rounds. <span class="lime">Every hour.</span></h2>
+      <p class="sub">This dial follows your own clock. Round 0 opens at midnight, Round 23 at 11 PM. Each opens on the hour and closes 50 minutes later.</p>
+      <ul class="legend"><li class="l-set">Settled</li><li class="l-open">Open</li><li class="l-wait">Awaiting result</li><li class="l-up">Upcoming</li></ul>
+      <div class="auto-card" id="autoCard"></div>
+    </div>
+    <div class="dial-wrap"><svg id="dial" viewBox="-130 -130 260 260" role="img" aria-label="24 hour round dial"></svg>
+      <div class="dial-c"><small id="dState">Round open</small><b id="dClock">00:00</b><span id="dRound">Round 14</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- PEOPLE -->
+<section class="sec" id="people">
+  <div class="wrap head"><p class="kicker">Everyone plays</p><h2>Farmers. Nurses. Riders. <span class="lime">You.</span></h2></div>
+  <div class="reel-strip" id="strip"><div class="strip-track" id="stripTrack"></div></div>
+</section>
+
+<!-- SAFE -->
+<section class="sec dark" id="safe">
+  <div class="wrap">
+    <div class="head"><p class="kicker">Built to be trusted</p><h2>Your wallet. <span class="lime">Locked down.</span></h2><p class="sub">Play for fun and within your means. You must be 18 or older. <a href="responsible-use.html" class="lime">Read our responsible use guide</a>.</p></div>
+    <div class="safe-grid">
+      <article><svg class="ic big"><use href="#i-finger"/></svg><h3>Biometric lock</h3><p>Fingerprint or face unlock before your wallet opens.</p></article>
+      <article><svg class="ic big"><use href="#i-lock"/></svg><h3>Encrypted storage</h3><p>Sensitive data is stored encrypted on your phone.</p></article>
+      <article><svg class="ic big"><use href="#i-bank"/></svg><h3>Verified payouts</h3><p>Withdrawals go only to your linked, verified bank account.</p></article>
+      <article><svg class="ic big"><use href="#i-eye"/></svg><h3>Open results</h3><p>See every settled round and how the crowd value was set.</p></article>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" id="faq">
+  <div class="wrap faq">
+    <div class="head"><p class="kicker">FAQ</p><h2>Quick <span class="lime">answers.</span></h2></div>
+    <div class="acc">
+      <details open><summary>What is CrowdGames?</summary><p>A mobile app with two games: Hourly Cash, where you pick a number from 1 to 5 each hour, and Hide or Guess, where you hide a number or guess another player's for an instant result.</p></details>
+      <details><summary>How many Hourly Cash rounds are there a day?</summary><p>24. One opens every hour on the hour and stays open for 50 minutes.</p></details>
+      <details><summary>Can I change my pick after I submit it?</summary><p>No. Once submitted, your pick is locked until the round settles.</p></details>
+      <details><summary>Can I lose money?</summary><p>In Hide or Guess, a wrong guess costs your entry stake. In Hourly Cash, your gain depends on how close your pick lands to the crowd's value. Only play with money you can afford to spend.</p></details>
+      <details><summary>What is Auto Play?</summary><p>Set a figure for the rounds you choose and the app submits for you just before each one closes. Keep the app open so it can fire.</p></details>
+      <details><summary>How do withdrawals work?</summary><p>Link a verified bank account, then request a payout from your wallet.</p></details>
+      <details><summary>Is my account secure?</summary><p>Yes. The app supports biometric lock and stores sensitive data encrypted on your device.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- DOWNLOAD -->
+<section class="final" id="download">
+  <div class="final-bg" aria-hidden="true"></div>
+  <div class="wrap final-in">
+    <p class="kicker">Next round</p>
+    <h2 class="mega">Opens in <span class="lime" id="nextIn">--:--</span></h2>
+    <p class="sub">Download CrowdGames and lock in your first pick before the clock runs out.</p>
+    <div class="cta center">
+      <a class="btn btn-lime btn-lg magnet" href="#" data-store>Download on the App Store</a>
+      <a class="btn btn-ghost btn-lg" href="#" data-store>Get it on Google Play</a>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <a href="#top" class="brand"><img src="assets/brand/logo.png" alt="" width="36" height="36"><span>Crowd<i>Games</i></span></a>
+    <nav aria-label="Footer"><a href="#games">Games</a><a href="#arena">Arena</a><a href="#faq">FAQ</a><a href="mailto:support@crowdstock.app">Contact</a><a href="privacy.html">Privacy</a><a href="terms.html">Terms</a><a href="responsible-use.html">Responsible use</a></nav>
+    <small>© <span id="yr"></span> CrowdGames. Must be 18+ to participate. Play responsibly.</small>
+  </div>
+</footer>
+
+<div class="toast" id="toast" role="status" hidden></div>
+<script src="app.js"></script>
+</body>
+</html>
